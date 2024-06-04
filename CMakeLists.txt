@@ -60,7 +60,7 @@ endfunction()
 foreach(TEST_FILE ${TEST_SOURCES})
   add_library_test(${TEST_FILE})
 endforeach()
-
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 # Enable testing
 enable_testing()
 
