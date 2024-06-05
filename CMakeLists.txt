@@ -60,7 +60,6 @@ endfunction()
 foreach(TEST_FILE ${TEST_SOURCES})
   add_library_test(${TEST_FILE})
 endforeach()
-
 # Enable testing
 enable_testing()
 
