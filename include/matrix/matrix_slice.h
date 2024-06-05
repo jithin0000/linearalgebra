@@ -37,16 +37,15 @@ Matrix_slice<N>::Matrix_slice(size_t s, std::initializer_list<size_t> exts)
     : size{1}, start{s}
 {
     size_t i = 0;
-    strides[i]=1;
     for(auto x : exts){
         extents[i] = x;
         size *= x;
         ++i;
     }
-
+    strides[N-1]=1;
     for (size_t i = 1; i < N; i++)
     {
-        strides[i] = strides[i-1] * extents[N-i];
+        strides[N-i-1] = strides[N-i] * extents[i-1];
     }
     
    
@@ -76,16 +75,16 @@ Matrix_slice<N>::Matrix_slice(Dims... dims)
 {
     static_assert(sizeof...(Dims) == N, "Number of dimensions must match");
     size_t i = 0;
-    strides[i]=1;
     for(auto x : {dims...}){
         extents[i] = x;
         size *= x;
         ++i;
     }
 
-  for (size_t i = 1; i < N; i++)
+    strides[N-1]=1;
+    for (size_t i = 1; i < N; i++)
     {
-        strides[i] = strides[i-1] * extents[N-i];
+        strides[N-i-1] = strides[N-i] * extents[i-1];
     }
     
 };
@@ -95,7 +94,7 @@ template<typename... Dims, typename RT>
 std::size_t Matrix_slice<N>::operator()(Dims... dims)const
 {
     static_assert(sizeof...(Dims) == N, "Number of dimensions must match");
-    size_t args[] = {static_cast<size_t>(dims)...};
+    size_t args[N] = {static_cast<size_t>(dims)...};
     size_t res = start;
     for (size_t i = 0; i < N; i++)
     {

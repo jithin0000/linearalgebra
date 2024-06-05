@@ -37,9 +37,9 @@ TEST(MATRIX_SLICED, CONSTRUCT_STRIDES)
     EXPECT_EQ(slice.extents[0], 3);
     EXPECT_EQ(slice.extents[1], 3);
     EXPECT_EQ(slice.extents[2], 2);
-    EXPECT_EQ(slice.strides[0], 9);
+    EXPECT_EQ(slice.strides[0], 1);
     EXPECT_EQ(slice.strides[1], 3);
-    EXPECT_EQ(slice.strides[2], 1);
+    EXPECT_EQ(slice.strides[2], 9);
 
 }
 
