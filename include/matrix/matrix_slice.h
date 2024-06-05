@@ -2,6 +2,7 @@
 #define MATRIX_SLICE
 #include <initializer_list>
 #include <array>
+#include <numeric>
 
 template<size_t N>
 struct Matrix_slice{
@@ -95,12 +96,8 @@ std::size_t Matrix_slice<N>::operator()(Dims... dims)const
 {
     static_assert(sizeof...(Dims) == N, "Number of dimensions must match");
     size_t args[N] = {static_cast<size_t>(dims)...};
-    size_t res = start;
-    for (size_t i = 0; i < N; i++)
-    {
-        res += args[i] * strides[i];
-    }
-    return res;
+    return inner_product(args, args+N, strides.begin(), size_t(0));
 }
+
 
 #endif // MATRIX_SLICE
