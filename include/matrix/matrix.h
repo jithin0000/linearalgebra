@@ -60,6 +60,17 @@ matrix<T,N>::matrix(Matrix_Impl::Matrix_Initializer<T,N> init)
     Matrix_Impl::insert_flat(init,elements);
     assert(elements.size() == desc.size);
 }
+template<typename T, size_t N>
+matrix<T,N>& matrix<T,N>::operator=(Matrix_Impl::Matrix_Initializer<T,N> init)
+{
+    Matrix_Impl::derive_extents<N>(init,desc.extents);
+    Matrix_Impl::calculate_strides(desc.extents, desc.strides);
+    Matrix_Impl::calculate_size(desc.extents, desc.size);
+    elements.reserve(desc.size);
+    Matrix_Impl::insert_flat(init,elements);
+    assert(elements.size() == desc.size);
+    return *this;
+}
 
 
 
