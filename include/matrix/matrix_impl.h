@@ -2,10 +2,13 @@
 #include <initializer_list> // Add this line
 namespace Matrix_Impl
 {
+    
+    
     template<typename T, size_t N>
     struct Matrix_Init{
         using type = std::initializer_list<typename Matrix_Init<T, N-1>::type>;
     };
+
 
     template<typename T>
     struct Matrix_Init<T,1>
@@ -15,6 +18,9 @@ namespace Matrix_Impl
 
     template<typename T>
     struct Matrix_Init<T,0>;
+
+    template<typename T, size_t N>
+    using Matrix_Initializer = typename Matrix_Init<T,N>::type;
 
 
     constexpr bool All(){return true;}
@@ -78,6 +84,26 @@ namespace Matrix_Impl
             return false;
     return true;
    }
+
+   template<typename T, typename Vec>
+   void insert_flat(std::initializer_list<T>list, Vec& vec){
+    add_list(list.begin(), list.end(), vec);
+   }
+
+   template<typename T, typename Vec>
+   void add_list(const std::initializer_list<T>* first, const std::initializer_list<T>* last,
+   Vec& vec
+    )
+    {
+        for(;first!=last;++first)
+            add_list(first->begin(),first->end(),vec);
+    }
+
+    template<typename T, typename Vec>
+    void add_list(const T* first, const T* last, Vec& vec)
+    {
+        vec.insert(vec.end(), first,last);
+    }
 
     
     

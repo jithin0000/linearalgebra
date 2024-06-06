@@ -5,8 +5,6 @@
 #include "matrix_impl.h"
 #include "matrix_slice.h"
 
-template<typename T, size_t N>
-using Matrix_Initializer = typename Matrix_Impl::Matrix_Init<T,N>::type;
 
 template<typename T, size_t N>
 class matrix{
@@ -29,8 +27,8 @@ class matrix{
         template<typename U>
         matrix& operator=(std::initializer_list<U>)=delete;
 
-        matrix(Matrix_Initializer<T,N>);
-        matrix& operator=(Matrix_Initializer<T,N>);
+        matrix(Matrix_Impl::Matrix_Initializer<T,N>);
+        matrix& operator=(Matrix_Impl::Matrix_Initializer<T,N>);
 
         template<typename... Exts>
         explicit matrix(Exts... exts);
@@ -53,14 +51,14 @@ matrix<T,N>::matrix(Exts... exts)
 }
 
 template<typename T, size_t N>
-matrix<T,N>::matrix(Matrix_Initializer<T,N> init)
+matrix<T,N>::matrix(Matrix_Impl::Matrix_Initializer<T,N> init)
 {
     Matrix_Impl::derive_extents<N>(init,desc.extents);
     Matrix_Impl::calculate_strides(desc.extents, desc.strides);
     Matrix_Impl::calculate_size(desc.extents, desc.size);
-    elements.resize(desc.size);
-    // Matrix_Impl::insert_flat(init,elements);
-    // assert(elements.size() == desc.size());
+    elements.reserve(desc.size);
+    Matrix_Impl::insert_flat(init,elements);
+    assert(elements.size() == desc.size);
 }
 
 
